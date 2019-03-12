@@ -1,0 +1,3 @@
+Manifest-Version: 1.0
+Implementation-Title: WOL
+Main-Class: ru.internet.wol.Main
