@@ -18,7 +18,7 @@ public class WOL {
             _mac = checkMac(mac);
         }
         catch (Exception ex){
-            exitWOL(StaticData.wrong_mac);
+            Exceptions.throwException(Exceptions.wrong_mac);
         }
     }
     void setIp(String ip){
@@ -26,7 +26,7 @@ public class WOL {
             _ip = checkIp(ip);
         }
         catch (Exception ex){
-            exitWOL(StaticData.wrong_ip);
+            Exceptions.throwException(Exceptions.wrong_ip);
         }
     }
     void setPort(String port){
@@ -34,13 +34,13 @@ public class WOL {
             _port = checkPort(port);
         }
         catch (Exception ex){
-            exitWOL(StaticData.wrong_port);
+            Exceptions.throwException(Exceptions.wrong_port);
         }
     }
 
     void wakeUp(){
         if (_mac == null){
-            exitWOL(StaticData.no_mac);
+            Exceptions.throwException(Exceptions.no_mac);
         }
         if (_ip == null){
             try {
@@ -94,6 +94,7 @@ public class WOL {
         return Integer.valueOf(port);
     }
 
+    //todo НЕ всегда работает
     private InetAddress getBroadcast() throws Exception{
         InetAddress _net = null;
         Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
@@ -108,8 +109,4 @@ public class WOL {
         return _net;
     }
 
-    private void exitWOL(String message){
-        System.out.println(message);
-        System.exit(0);
-    }
 }
