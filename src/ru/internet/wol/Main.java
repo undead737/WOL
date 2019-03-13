@@ -3,11 +3,7 @@ package ru.internet.wol;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
-import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.List;
-import java.util.Properties;
+import java.io.InputStreamReader;
 
 public class Main {
 
@@ -45,10 +41,9 @@ public class Main {
     //todo Make HELP file/
     private static void help(){
         try {
-            //URL url = Main.class.getResource("Help");
-            File file = new File(Main.class.getResource("Help").getPath());
+            InputStreamReader fileReader = new InputStreamReader (Main.class.getResourceAsStream("Help"), "UTF-8");
+            BufferedReader reader = new BufferedReader(fileReader);
             String line;
-            BufferedReader reader = new BufferedReader(new FileReader(file));
             while ((line = reader.readLine()) != null) {
                 System.out.println(line);
             }
