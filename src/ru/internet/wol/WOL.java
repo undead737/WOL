@@ -3,7 +3,7 @@ package ru.internet.wol;
 import java.net.*;
 import java.util.Enumeration;
 
-//todo Поменять все на свои Exceptions
+//todo Поменять все на свои Messages
 public class WOL {
 
     private InetAddress _ip;
@@ -18,7 +18,7 @@ public class WOL {
             _mac = checkMac(mac);
         }
         catch (Exception ex){
-            Exceptions.throwException(Exceptions.wrong_mac);
+            Messages.throwMessage(Messages.wrong_mac);
         }
     }
     void setIp(String ip){
@@ -26,7 +26,7 @@ public class WOL {
             _ip = checkIp(ip);
         }
         catch (Exception ex){
-            Exceptions.throwException(Exceptions.wrong_ip);
+            Messages.throwMessage(Messages.wrong_ip);
         }
     }
     void setPort(String port){
@@ -34,17 +34,18 @@ public class WOL {
             _port = checkPort(port);
         }
         catch (Exception ex){
-            Exceptions.throwException(Exceptions.wrong_port);
+            Messages.throwMessage(Messages.wrong_port);
         }
     }
 
     void wakeUp(){
         if (_mac == null){
-            Exceptions.throwException(Exceptions.no_mac);
+            Messages.throwMessage(Messages.no_mac);
         }
         if (_ip == null){
             try {
                 _ip = getBroadcast();
+                System.out.println(_ip);
             }
             catch (Exception ex){
                 System.out.println(ex.getMessage());
@@ -94,7 +95,7 @@ public class WOL {
         return Integer.valueOf(port);
     }
 
-    //todo НЕ всегда работает
+    //todo НЕ всегда работает (maybe use ip of gateway or router)
     private InetAddress getBroadcast() throws Exception{
         InetAddress _net = null;
         Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
@@ -108,5 +109,4 @@ public class WOL {
         }
         return _net;
     }
-
 }

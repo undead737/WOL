@@ -1,11 +1,11 @@
 package ru.internet.wol;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
 import java.io.InputStreamReader;
 
 public class Main {
+
+    private static String _version = "version 1.0.0";
 
     public static void main(String[] args) {
         param param = null;
@@ -17,23 +17,32 @@ public class Main {
                     case "-m":
                         param = ru.internet.wol.param.mac;
                         wol.setMac(args[i+1]);
+                        i++;
                         break;
                     case "-i":
                         param = ru.internet.wol.param.ip;
                         wol.setIp(args[i+1]);
+                        i++;
                         break;
                     case "-p":
                         param = ru.internet.wol.param.port;
                         wol.setPort(args[i+1]);
+                        i++;
+                        break;
+                    case "-v":
+                        Messages.throwMessage(_version);
                         break;
                     case "--help":
                         help();
                         System.exit(0);
                         break;
+                    default:
+                        Messages.throwMessage(args[i] + Messages.wrong_option);
+                        break;
                 }
             }
             catch (Exception ex){
-                Exceptions.throwException(Exceptions.wrong_param + param);
+                Messages.throwMessage(Messages.wrong_param + param);
             }
         }
         wol.wakeUp();

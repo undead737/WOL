@@ -1,11 +1,9 @@
 
-вацувацуаукаук
+Usage: leshif-wol [-OPTION] [-OPTION] ...
+       leshif-wol - m [hardware_address] -i [ip_address] -p [port]
 
-укпук
-пук
-п
-ук
-пййц        кепркп
-efef
-ef
-er
+Otions:
+    -v  displays leshif-wol version
+    -m  hardware_address -> required option
+    -i  destination IP address -> default address: broadcast address
+    -p  destination port -> default port: 9
