@@ -32,6 +32,9 @@ public class Main {
                     case "-v":
                         Messages.throwMessage(_version);
                         break;
+                    case "-f":
+                        wol.setFullMode();
+                        break;
                     case "--help":
                         help();
                         System.exit(0);

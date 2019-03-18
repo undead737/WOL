@@ -7,3 +7,4 @@ Otions:
     -m  hardware_address -> required option
     -i  destination IP address -> default address: broadcast address
     -p  destination port -> default port: 9
+    -f  full sending mode

@@ -12,7 +12,6 @@ class Messages {
     static final String wrong_param = "No parameter set: ";
     static final String wrong_option = ": option not found. Use --help to display all options";
 
-
     static void throwMessage(String message){
         System.out.println(message);
         System.exit(0);
