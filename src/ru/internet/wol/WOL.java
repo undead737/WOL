@@ -95,7 +95,7 @@ public class WOL {
         return Integer.valueOf(port);
     }
 
-    //todo НЕ всегда работает (maybe use ip of gateway or router)
+    //todo НЕ всегда работает в локальной (maybe use ip of gateway or router)
     private InetAddress getBroadcast() throws Exception{
         InetAddress _net = null;
         Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();

@@ -47,7 +47,7 @@ public class Main {
         }
         wol.wakeUp();
     }
-    //todo Make HELP file/
+
     private static void help(){
         try {
             InputStreamReader fileReader = new InputStreamReader (Main.class.getResourceAsStream("Help"), "UTF-8");
