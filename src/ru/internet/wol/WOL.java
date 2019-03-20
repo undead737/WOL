@@ -1,32 +1,36 @@
 package ru.internet.wol;
 
 import java.net.*;
+import java.util.ArrayList;
 import java.util.Enumeration;
 
 //todo Поменять все на свои Messages
 public class WOL {
 
-    private InetAddress _ip;
+    private ArrayList<InetAddress> _ip;
     private int _port;
     private byte[] _mac;
+    private boolean _full = false;
 
     public WOL(){
         _port = 9;
+        _ip = new ArrayList<>();
     }
     void setMac(String mac){
         try {
             _mac = checkMac(mac);
         }
         catch (Exception ex){
-            Messages.throwMessage(Messages.wrong_mac);
+            Messages.throwOutMessage(Messages.wrong_mac);
         }
     }
     void setIp(String ip){
         try {
-            _ip = checkIp(ip);
+            _ip.add(checkIp(ip));
         }
         catch (Exception ex){
-            Messages.throwMessage(Messages.wrong_ip);
+            System.out.println(ex.getMessage());
+            Messages.throwOutMessage("'" + ip + "' : " + Messages.wrong_ip);
         }
     }
     void setPort(String port){
@@ -34,42 +38,54 @@ public class WOL {
             _port = checkPort(port);
         }
         catch (Exception ex){
-            Messages.throwMessage(Messages.wrong_port);
+            Messages.throwOutMessage(Messages.wrong_port);
         }
+    }
+    void setFullMode(){
+        _full = true;
     }
 
     void wakeUp(){
         if (_mac == null){
-            Messages.throwMessage(Messages.no_mac);
+            Messages.throwOutMessage(Messages.no_mac);
         }
-        if (_ip == null){
+        if (_ip.size() == 0 ){
             try {
-                _ip = getBroadcast();
-                System.out.println(_ip);
+                if (_full){
+                    _ip = getAllBroadcast();
+                }
+                else {
+                    assert false;
+                    _ip.add(getBroadcast());
+                }
             }
+            //todo
             catch (Exception ex){
                 System.out.println(ex.getMessage());
                 System.exit(0);
             }
         }
+
         byte[] upPackage = new byte[17*6];
         for(int i=0;i<6;i++){
             upPackage[i] = (byte)0xFF;
         }
-        for(int i=1;i<17;i++){
-            for(int j=0;j<6;j++){
-                upPackage[i*6+j] = _mac[j];
-            }
-        }
+        //todo
+        for(int i=1;i<17;i++) System.arraycopy(_mac, 0, upPackage, i * 6, 6);
+
         //todo Подумать про "255.255.255.255"
-        try {
-            DatagramSocket socket = new DatagramSocket(_port);
-            DatagramPacket pck = new DatagramPacket(upPackage, upPackage.length, _ip, _port);
-            socket.send(pck);
-        }
-        catch (Exception ex){
-            //Port out of range
-            System.out.println(ex.getMessage());
+        for (InetAddress ip : _ip){
+            try {
+                DatagramSocket socket = new DatagramSocket(_port);
+                DatagramPacket pck = new DatagramPacket(upPackage, upPackage.length, ip, _port);
+                socket.send(pck);
+                Messages.throwInfoMessage(Messages.sendInfo + ip + ":" + _port);
+                socket.close();
+            }
+            catch (Exception ex){
+                //Port out of range
+                System.out.println(ex.getMessage());
+            }
         }
     }
 
@@ -95,7 +111,6 @@ public class WOL {
         return Integer.valueOf(port);
     }
 
-    //todo НЕ всегда работает в локальной (maybe use ip of gateway or router)
     private InetAddress getBroadcast() throws Exception{
         InetAddress _net = null;
         Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
@@ -104,6 +119,22 @@ public class WOL {
             for(InterfaceAddress interaddress : next.getInterfaceAddresses()){
                 if (interaddress.getAddress().isSiteLocalAddress()){
                     _net = interaddress.getBroadcast();
+                }
+            }
+        }
+        return _net;
+    }
+
+    //todo broadcast addr + gateway or router
+    //todo test broadcast ...255
+    private ArrayList<InetAddress> getAllBroadcast() throws Exception {
+        ArrayList<InetAddress> _net = new ArrayList<>();
+        Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
+        while (interfaces.hasMoreElements()){
+            NetworkInterface next = interfaces.nextElement();
+            for(InterfaceAddress interaddress : next.getInterfaceAddresses()){
+                if (interaddress.getAddress().isSiteLocalAddress()){
+                    _net.add(interaddress.getBroadcast());
                 }
             }
         }

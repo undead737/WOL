@@ -7,10 +7,4 @@ Otions:
     -m  hardware_address -> required option
     -i  destination IP address -> default address: broadcast address
     -p  destination port -> default port: 9
-
-
-Почему не работает:
-    В локальной сети:
-
-    Через сеть Интернет:
-        1) Посьавить перенаправление портов
+    -f  full sending mode

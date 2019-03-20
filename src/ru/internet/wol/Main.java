@@ -30,19 +30,22 @@ public class Main {
                         i++;
                         break;
                     case "-v":
-                        Messages.throwMessage(_version);
+                        Messages.throwOutMessage(_version);
+                        break;
+                    case "-f":
+                        wol.setFullMode();
                         break;
                     case "--help":
                         help();
                         System.exit(0);
                         break;
                     default:
-                        Messages.throwMessage(args[i] + Messages.wrong_option);
+                        Messages.throwOutMessage(args[i] + Messages.wrong_option);
                         break;
                 }
             }
             catch (Exception ex){
-                Messages.throwMessage(Messages.wrong_param + param);
+                Messages.throwOutMessage(Messages.wrong_param + param);
             }
         }
         wol.wakeUp();
