@@ -21,7 +21,7 @@ public class WOL {
             _mac = checkMac(mac);
         }
         catch (Exception ex){
-            Messages.throwMessage(Messages.wrong_mac);
+            Messages.throwOutMessage(Messages.wrong_mac);
         }
     }
     void setIp(String ip){
@@ -30,7 +30,7 @@ public class WOL {
         }
         catch (Exception ex){
             System.out.println(ex.getMessage());
-            Messages.throwMessage("'" + ip + "' : " + Messages.wrong_ip);
+            Messages.throwOutMessage("'" + ip + "' : " + Messages.wrong_ip);
         }
     }
     void setPort(String port){
@@ -38,7 +38,7 @@ public class WOL {
             _port = checkPort(port);
         }
         catch (Exception ex){
-            Messages.throwMessage(Messages.wrong_port);
+            Messages.throwOutMessage(Messages.wrong_port);
         }
     }
     void setFullMode(){
@@ -47,9 +47,9 @@ public class WOL {
 
     void wakeUp(){
         if (_mac == null){
-            Messages.throwMessage(Messages.no_mac);
+            Messages.throwOutMessage(Messages.no_mac);
         }
-        if (_ip == null){
+        if (_ip.size() == 0 ){
             try {
                 if (_full){
                     _ip = getAllBroadcast();
@@ -65,11 +65,11 @@ public class WOL {
                 System.exit(0);
             }
         }
+
         byte[] upPackage = new byte[17*6];
         for(int i=0;i<6;i++){
             upPackage[i] = (byte)0xFF;
         }
-
         //todo
         for(int i=1;i<17;i++) System.arraycopy(_mac, 0, upPackage, i * 6, 6);
 
@@ -79,6 +79,7 @@ public class WOL {
                 DatagramSocket socket = new DatagramSocket(_port);
                 DatagramPacket pck = new DatagramPacket(upPackage, upPackage.length, ip, _port);
                 socket.send(pck);
+                Messages.throwInfoMessage(Messages.sendInfo + ip + ":" + _port);
                 socket.close();
             }
             catch (Exception ex){
@@ -110,8 +111,6 @@ public class WOL {
         return Integer.valueOf(port);
     }
 
-    //todo НЕ всегда работает (maybe use ip of gateway or router)
-    //todo Добавить режим "Полной рассылки". Будет рассылать на все доступные broadcast addr + gateway or router
     private InetAddress getBroadcast() throws Exception{
         InetAddress _net = null;
         Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
@@ -126,6 +125,8 @@ public class WOL {
         return _net;
     }
 
+    //todo broadcast addr + gateway or router
+    //todo test broadcast ...255
     private ArrayList<InetAddress> getAllBroadcast() throws Exception {
         ArrayList<InetAddress> _net = new ArrayList<>();
         Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();

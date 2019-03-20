@@ -12,8 +12,15 @@ class Messages {
     static final String wrong_param = "No parameter set: ";
     static final String wrong_option = ": option not found. Use --help to display all options";
 
-    static void throwMessage(String message){
-        System.out.println(message);
+
+    static final String sendInfo = "Sending to ";
+
+    static void throwOutMessage(String message){
+        System.out.println((char)27 + "[31m" +message);
         System.exit(0);
+    }
+
+    static void throwInfoMessage(String message){
+        System.out.println((char)27 + "[32m" +  message);
     }
 }
