@@ -5,6 +5,8 @@ enum param{
 }
 
 class Messages {
+    private static final String reset_colour = "\u001B[0m";
+
     static final String wrong_mac = "Wrong MAC-address! Examples of using: [FF:FF:FF:FF:FF:FF] [FF-FF-FF-FF-FF-FF] [FF;FF;FF;FF;FF;FF]";
     static final String wrong_ip = "Wrong IP-address! Example of using: [255.255.255.255]";
     static final String wrong_port = "Wrong Port!";
@@ -16,11 +18,11 @@ class Messages {
     static final String sendInfo = "Sending to ";
 
     static void throwOutMessage(String message){
-        System.out.println((char)27 + "[31m" +message);
+        System.out.println((char)27 + "[31m" +message + reset_colour);
         System.exit(0);
     }
 
     static void throwInfoMessage(String message){
-        System.out.println((char)27 + "[32m" +  message);
+        System.out.println((char)27 + "[32m" +  message + reset_colour);
     }
 }

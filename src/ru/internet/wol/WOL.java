@@ -29,7 +29,6 @@ public class WOL {
             _ip.add(checkIp(ip));
         }
         catch (Exception ex){
-            System.out.println(ex.getMessage());
             Messages.throwOutMessage("'" + ip + "' : " + Messages.wrong_ip);
         }
     }
@@ -49,21 +48,18 @@ public class WOL {
         if (_mac == null){
             Messages.throwOutMessage(Messages.no_mac);
         }
-        if (_ip.size() == 0 ){
-            try {
-                if (_full){
-                    _ip = getAllBroadcast();
-                }
-                else {
-                    assert false;
-                    _ip.add(getBroadcast());
-                }
+        try {
+            if(_full){
+                _ip.addAll(getAllBroadcast());
             }
-            //todo
-            catch (Exception ex){
-                System.out.println(ex.getMessage());
-                System.exit(0);
+            else if (_ip.size() == 0){
+                _ip.add(getBroadcast());
             }
+        }
+        //todo
+        catch (Exception ex){
+            System.out.println(ex.getMessage());
+            System.exit(0);
         }
 
         byte[] upPackage = new byte[17*6];
@@ -73,11 +69,11 @@ public class WOL {
         //todo
         for(int i=1;i<17;i++) System.arraycopy(_mac, 0, upPackage, i * 6, 6);
 
-        //todo Подумать про "255.255.255.255"
+        //todo "255.255.255.255" = 192.168.10.255
         for (InetAddress ip : _ip){
             try {
-                DatagramSocket socket = new DatagramSocket(_port);
                 DatagramPacket pck = new DatagramPacket(upPackage, upPackage.length, ip, _port);
+                DatagramSocket socket = new DatagramSocket();
                 socket.send(pck);
                 Messages.throwInfoMessage(Messages.sendInfo + ip + ":" + _port);
                 socket.close();
