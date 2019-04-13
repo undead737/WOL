@@ -1,10 +1,13 @@
 
 Usage: leshif-wol [-OPTION] [-OPTION] ...
-       leshif-wol - m [hardware_address] -i [ip_address] -p [port]
+       leshif-wol - m [hardware_address] -i [ip_address] -p [port] -n 81
 
 Otions:
     -v  displays leshif-wol version
-    -m  hardware_address -> required option
-    -i  destination IP address -> default address: broadcast address
-    -p  destination port -> default port: 9
-    -f  full sending mode
+    -m  set hardware_address -> required option
+    -i  set destination IP address -> default address: net-interface broadcast address
+    -p  set destination port -> default port: 9
+    -n  set used network interface
+    -f  full sending mod (used all net)
+    -na displays all network interface
+    -nu displays used network interface

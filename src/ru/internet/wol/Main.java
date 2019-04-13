@@ -2,11 +2,9 @@ package ru.internet.wol;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 
-public class Main {
-
-    private static String _version = "version 1.0.0";
-
+class Main {
     public static void main(String[] args) {
         param param = null;
         WOL wol = new WOL();
@@ -30,22 +28,33 @@ public class Main {
                         i++;
                         break;
                     case "-v":
-                        Messages.throwOutMessage(_version);
+                        wol.getVersion();
                         break;
                     case "-f":
                         wol.setFullMode();
+                        break;
+                    case "-n":
+                        param = ru.internet.wol.param.network;
+                        wol.setNetwork(args[i+1]);
+                        i++;
+                        break;
+                    case "-na":
+                        wol.getAllInterfaces();
+                        break;
+                    case "-nu":
+                        wol.getUsedInterface();
                         break;
                     case "--help":
                         help();
                         System.exit(0);
                         break;
                     default:
-                        Messages.throwOutMessage(args[i] + Messages.wrong_option);
+                        Messages.throwExitMessage(args[i] + Messages.wrong_option, colour.red);
                         break;
                 }
             }
             catch (Exception ex){
-                Messages.throwOutMessage(Messages.wrong_param + param);
+                Messages.throwExitMessage(Messages.wrong_param + param, colour.red);
             }
         }
         wol.wakeUp();
@@ -53,7 +62,7 @@ public class Main {
 
     private static void help(){
         try {
-            InputStreamReader fileReader = new InputStreamReader (Main.class.getResourceAsStream("Help"), "UTF-8");
+            InputStreamReader fileReader = new InputStreamReader (Main.class.getResourceAsStream("Help"), StandardCharsets.UTF_8);
             BufferedReader reader = new BufferedReader(fileReader);
             String line;
             while ((line = reader.readLine()) != null) {
