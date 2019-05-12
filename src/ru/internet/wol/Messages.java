@@ -1,45 +1,38 @@
 package ru.internet.wol;
 
-enum param{
-    mac, ip, port, network
-}
-enum colour{
-    white, red, green
-}
-
 class Messages {
     private static final String reset_colour = "\u001B[0m";
 
-    static final String wrong_mac = "Wrong MAC-address! Examples of using: [FF:FF:FF:FF:FF:FF] [FF-FF-FF-FF-FF-FF] [FF;FF;FF;FF;FF;FF]";
-    static final String wrong_ip = "Wrong IP-address! Example of using: [255.255.255.255]";
-    static final String wrong_port = "Wrong Port!";
-    static final String wrong_net = "Wrong number of Network!";
-    static final String no_mac = "MAC-address is required option! Use option -m [hardware_address]";
-    static final String wrong_param = "No parameter set: ";
-    static final String wrong_option = ": option not found. Use --help to display all options";
-    static final String no_networks = "Active network interfaces not detected";
-
-    static final String sendInfo = "Sending to ";
+    static final String WRONG_MAC = "Wrong MAC-address! Examples of using: [FF:FF:FF:FF:FF:FF] [FF-FF-FF-FF-FF-FF]";
+    static final String WRONG_IP = "Wrong IP-address! Example of using: [192.168.10.1]";
+    static final String WRONG_PORT = "Wrong Port!";
+    static final String PORT_OUT_RANGE = "Port out of range!";
+    static final String WRONG_NET = "Wrong number of Network!";
+    static final String NO_MAC = "MAC-address is required option! Use option -m [hardware_address]";
+    static final String WRONG_PARAM = "No value set: ";
+    static final String WRONG_OPTION = " option don't found. Use --help or -h to display all options";
+    static final String NO_NETWORKS = "Active network interfaces don't detected";
+    static final String ERROR_GETTING_NET = "Error getting net-interface with number: ";
+    static final String ERROR_SEND_WOL = "Error sending wol-packet to ";
+    static final String INFO_NET = "Use option -na to display all available network interfaces";
+    static final String INFO_SEND = "Sending to ";
 
     static void throwExitMessage(String message, colour col){
         System.out.println((char)27 + getColour(col) + message + reset_colour);
         System.exit(0);
     }
-
     static void throwInfoMessage(String message, colour col){
         System.out.println((char)27 + getColour(col) +  message + reset_colour);
     }
-
     static private String getColour(colour col){
-        String colour = "[0m";
         switch (col){
             case red:
-                colour = "[31m";
-                break;
+                return "[31m";
             case green:
-                colour = "[32m";
-                break;
+                return "[32m";
+            case white:
+            default:
+                return "[0m";
         }
-        return colour;
     }
 }

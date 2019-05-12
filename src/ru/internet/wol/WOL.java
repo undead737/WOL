@@ -1,9 +1,9 @@
 package ru.internet.wol;
 
+import java.io.IOException;
 import java.net.*;
 import java.util.ArrayList;
 
-//todo Поменять все на свои Messages
 class WOL {
     private Network _network;
     private ArrayList<InetAddress> _ipList;
@@ -27,7 +27,7 @@ class WOL {
             _mac = checkMac(mac);
         }
         catch (Exception ex){
-            Messages.throwExitMessage("'" + mac + "' : " + Messages.wrong_mac, colour.red);
+            Messages.throwExitMessage("'" + mac + "' : " + Messages.WRONG_MAC, colour.red);
         }
     }
     void setIp(String ip){
@@ -35,15 +35,18 @@ class WOL {
             _ipList.add(checkIp(ip));
         }
         catch (Exception ex){
-            Messages.throwExitMessage("'" + ip + "' : " + Messages.wrong_ip, colour.red);
+            Messages.throwExitMessage("'" + ip + "' : " + Messages.WRONG_IP, colour.red);
         }
     }
     void setPort(String port){
         try {
             _port = checkInt(port);
+            if (_port<1 || _port>65535){
+                Messages.throwExitMessage(Messages.PORT_OUT_RANGE, colour.red);
+            }
         }
         catch (Exception ex){
-            Messages.throwExitMessage("'" + port + "' : " + Messages.wrong_port, colour.red);
+            Messages.throwExitMessage("'" + port + "' : " + Messages.WRONG_PORT, colour.red);
         }
     }
     void setFullMode(){
@@ -54,23 +57,23 @@ class WOL {
             _usedNetwork = checkInt(net);
         }
         catch (Exception ex){
-            Messages.throwExitMessage(Messages.wrong_net, colour.red);
+            Messages.throwExitMessage(Messages.WRONG_NET, colour.red);
         }
     }
     void wakeUp(){
         if (_mac == null) {
-            Messages.throwExitMessage(Messages.no_mac, colour.red);
+            Messages.throwExitMessage(Messages.NO_MAC, colour.red);
         }
-        try {
-            if(_full) {
-                _ipList.addAll(_network.getAllBroadcast());
-            }
-            else if (_ipList.size() == 0){
+        if(_full) {
+            _ipList.addAll(_network.getAllBroadcast());
+        }
+        else if (_ipList.isEmpty()){
+            try {
                 _ipList.add(_network.getBroadcast(_usedNetwork));
             }
-        }
-        catch (Exception ex){
-            Messages.throwExitMessage(ex.getMessage(), colour.red);
+            catch (Exception ex){
+                Messages.throwExitMessage(Messages.ERROR_GETTING_NET + _usedNetwork + ". " + Messages.INFO_NET, colour.red);
+            }
         }
         byte[] wolPackage = new byte[17*6];
         for(int i=0;i<6;i++){
@@ -79,18 +82,15 @@ class WOL {
         for(int i=1;i<17;i++) {
             System.arraycopy(_mac, 0, wolPackage, i * 6, 6);
         }
-        //todo "255.255.255.255" = 192.168.10.255
         for (InetAddress ip : _ipList){
             try {
-                DatagramPacket pck = new DatagramPacket(wolPackage, wolPackage.length, ip, _port);
                 DatagramSocket socket = new DatagramSocket();
-                socket.send(pck);
-                Messages.throwInfoMessage(Messages.sendInfo + ip + ":" + _port, colour.green);
+                socket.send(new DatagramPacket(wolPackage, wolPackage.length, ip, _port));
                 socket.close();
+                Messages.throwInfoMessage(Messages.INFO_SEND + ip + ":" + _port, colour.green);
             }
-            catch (Exception ex){
-                //Port out of range
-                System.out.println(ex.getMessage());
+            catch (IOException io){
+                Messages.throwExitMessage(Messages.ERROR_SEND_WOL + ip + ":" + _port, colour.red);
             }
         }
     }

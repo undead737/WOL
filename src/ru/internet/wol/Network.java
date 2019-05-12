@@ -5,6 +5,7 @@ import java.net.InterfaceAddress;
 import java.net.NetworkInterface;
 import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.Objects;
 
 class Network {
     private ArrayList<NetInerface> _netInterfaces;
@@ -24,16 +25,15 @@ class Network {
 
     Network(){
         try {
-            _netInterfaces = AllInterfaces();
-            if (_netInterfaces.size()==0){
-                Messages.throwExitMessage(Messages.no_networks, colour.red);
+            _netInterfaces = allInterfaces();
+            if (_netInterfaces.isEmpty()){
+                Messages.throwExitMessage(Messages.NO_NETWORKS, colour.red);
             }
         } catch (Exception ex){
             Messages.throwExitMessage(ex.getMessage(), colour.red);
         }
     }
-
-    private ArrayList<NetInerface> AllInterfaces() throws Exception{
+    private ArrayList<NetInerface> allInterfaces() throws Exception{
         ArrayList<NetInerface> result = new ArrayList<>();
         Enumeration<NetworkInterface> netInterfaces = NetworkInterface.getNetworkInterfaces();
         while (netInterfaces.hasMoreElements()){
@@ -61,24 +61,15 @@ class Network {
     }
     ArrayList<String> getAllInterfaces(){
         ArrayList<String> result = new ArrayList<>();
-        for (NetInerface net : _netInterfaces){
-            result.add(net._number + "   " + net._name + "   " + net._broadcast);
-        }
+        _netInterfaces.forEach(x -> result.add(x._number + "   " + x._name + "   " + x._broadcast));
         return result;
     }
-    InetAddress getBroadcast(int number) throws Exception{
-        InetAddress result = _netInterfaces.stream().filter((x) -> x._number == number).findFirst().get()._broadcast;
-        if (result == null){
-            throw new Exception(Messages.wrong_net + " : " + number);
-        }
-        return result;
+    InetAddress getBroadcast(int number){
+        return Objects.requireNonNull(_netInterfaces.stream().filter(x -> x._number == number).findFirst().orElse(null))._broadcast;
     }
     ArrayList<InetAddress> getAllBroadcast(){
-        //return new ArrayList<InetAddress>().addAll(_netInterfaces.stream().forEach((x) -> x._broadcast));
         ArrayList<InetAddress> result = new ArrayList<>();
-        for (NetInerface net : _netInterfaces){
-            result.add(net._broadcast);
-        }
+        _netInterfaces.forEach(x -> result.add(x._broadcast));
         return result;
     }
 }

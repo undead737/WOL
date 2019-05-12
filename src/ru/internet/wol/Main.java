@@ -8,7 +8,6 @@ class Main {
     public static void main(String[] args) {
         param param = null;
         WOL wol = new WOL();
-        //todo make norm switch
         for(int i = 0;i<args.length;i++){
             try {
                 switch (args[i]){
@@ -45,33 +44,32 @@ class Main {
                         wol.getUsedInterface();
                         break;
                     case "--help":
+                    case "-h":
                         help();
                         System.exit(0);
                         break;
                     default:
-                        Messages.throwExitMessage(args[i] + Messages.wrong_option, colour.red);
+                        Messages.throwExitMessage(args[i] + Messages.WRONG_OPTION, colour.red);
                         break;
                 }
             }
             catch (Exception ex){
-                Messages.throwExitMessage(Messages.wrong_param + param, colour.red);
+                Messages.throwExitMessage(Messages.WRONG_PARAM + param, colour.red);
             }
         }
         wol.wakeUp();
     }
-
     private static void help(){
         try {
-            InputStreamReader fileReader = new InputStreamReader (Main.class.getResourceAsStream("Help"), StandardCharsets.UTF_8);
-            BufferedReader reader = new BufferedReader(fileReader);
+            BufferedReader reader = new BufferedReader(new InputStreamReader (Main.class.getResourceAsStream(ProjectData.RESOURCE_HELP), StandardCharsets.UTF_8));
             String line;
             while ((line = reader.readLine()) != null) {
                 System.out.println(line);
             }
+            reader.close();
         }
         catch (Exception ex){
             System.out.println(ex.getMessage());
         }
     }
 }
-//-m E0:3F:49:15:D5:AF -i 85.113.58.194
