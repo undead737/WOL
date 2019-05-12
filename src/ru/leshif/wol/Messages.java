@@ -1,4 +1,4 @@
-package ru.internet.wol;
+package ru.leshif.wol;
 
 class Messages {
     private static final String reset_colour = "\u001B[0m";

@@ -1,4 +1,4 @@
-package ru.internet.wol;
+package ru.leshif.wol;
 
 import java.net.InetAddress;
 import java.net.InterfaceAddress;

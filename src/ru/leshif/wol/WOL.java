@@ -1,4 +1,4 @@
-package ru.internet.wol;
+package ru.leshif.wol;
 
 import java.io.IOException;
 import java.net.*;

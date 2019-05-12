@@ -1,4 +1,4 @@
-package ru.internet.wol;
+package ru.leshif.wol;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -12,17 +12,17 @@ class Main {
             try {
                 switch (args[i]){
                     case "-m":
-                        param = ru.internet.wol.param.mac;
+                        param = ru.leshif.wol.param.mac;
                         wol.setMac(args[i+1]);
                         i++;
                         break;
                     case "-i":
-                        param = ru.internet.wol.param.ip;
+                        param = ru.leshif.wol.param.ip;
                         wol.setIp(args[i+1]);
                         i++;
                         break;
                     case "-p":
-                        param = ru.internet.wol.param.port;
+                        param = ru.leshif.wol.param.port;
                         wol.setPort(args[i+1]);
                         i++;
                         break;
@@ -33,7 +33,7 @@ class Main {
                         wol.setFullMode();
                         break;
                     case "-n":
-                        param = ru.internet.wol.param.network;
+                        param = ru.leshif.wol.param.network;
                         wol.setNetwork(args[i+1]);
                         i++;
                         break;

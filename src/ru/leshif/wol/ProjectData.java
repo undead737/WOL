@@ -1,4 +1,4 @@
-package ru.internet.wol;
+package ru.leshif.wol;
 
 enum param{
     mac, ip, port, network
