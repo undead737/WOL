@@ -3,8 +3,21 @@ package ru.leshif.wol;
 enum param{
     mac, ip, port, network
 }
+
 enum colour{
-    white, red, green
+    white("[0m"),
+    red("[31m"),
+    green("[32m");
+
+    private String value;
+
+    colour(String value){
+        this.value=value;
+    }
+
+    public String getColour(){
+        return value;
+    }
 }
 
 class ProjectData {

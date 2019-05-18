@@ -1,7 +1,7 @@
 package ru.leshif.wol;
 
 class Messages {
-    private static final String reset_colour = "\u001B[0m";
+    private static final String _RESET_COLOUR = "\u001B[0m";
 
     static final String WRONG_MAC = "Wrong MAC-address! Examples of using: [FF:FF:FF:FF:FF:FF] [FF-FF-FF-FF-FF-FF]";
     static final String WRONG_IP = "Wrong IP-address! Example of using: [192.168.10.1]";
@@ -20,7 +20,7 @@ class Messages {
 
     static void throwExitMessage(String message, colour col){
         if (!System.getProperty("os.name").toLowerCase().contains("windows")){
-            System.out.println((char)27 + getColour(col) + message + reset_colour);
+            System.out.println((char)27 + col.getColour() + message + _RESET_COLOUR);
         }
         else{
             System.out.println(message);
@@ -29,21 +29,10 @@ class Messages {
     }
     static void throwInfoMessage(String message, colour col){
         if (!System.getProperty("os.name").toLowerCase().contains("windows")) {
-            System.out.println((char) 27 + getColour(col) + message + reset_colour);
+            System.out.println((char) 27 + col.getColour() + message + _RESET_COLOUR);
         }
         else {
             System.out.println(message);
-        }
-    }
-    static private String getColour(colour col){
-        switch (col){
-            case red:
-                return "[31m";
-            case green:
-                return "[32m";
-            case white:
-            default:
-                return "[0m";
         }
     }
 }

@@ -106,9 +106,7 @@ class WOL {
     }
     private byte[] checkMac(String mac) throws Exception{
         byte[] result = new byte[6];
-        mac = mac.replace("-", "");
-        mac = mac.replace(":", "");
-        mac = mac.replace(";", "");
+        mac = mac.replace("-", "").replace(":", "").replace(";", "");
         if (mac.length() != 12){
             throw new Exception();
         }

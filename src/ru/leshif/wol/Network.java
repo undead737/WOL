@@ -1,7 +1,6 @@
 package ru.leshif.wol;
 
 import java.net.InetAddress;
-import java.net.InterfaceAddress;
 import java.net.NetworkInterface;
 import java.util.ArrayList;
 import java.util.Enumeration;
@@ -38,12 +37,10 @@ class Network {
         Enumeration<NetworkInterface> netInterfaces = NetworkInterface.getNetworkInterfaces();
         while (netInterfaces.hasMoreElements()){
             NetworkInterface net = netInterfaces.nextElement();
-            for (InterfaceAddress addr : net.getInterfaceAddresses()){
-                if (addr.getAddress().isSiteLocalAddress()){
-                    result.add(new NetInerface(net.getIndex(), net.getDisplayName(), addr.getBroadcast()));
-                    _numberUsed = net.getIndex();
-                }
-            }
+            net.getInterfaceAddresses().stream().filter(addr -> addr.getAddress().isSiteLocalAddress()).forEach(addr -> {
+                result.add(new NetInerface(net.getIndex(), net.getDisplayName(), addr.getBroadcast()));
+                _numberUsed = net.getIndex();
+            });
         }
         return result;
     }
