@@ -69,7 +69,7 @@ class Main {
             reader.close();
         }
         catch (Exception ex){
-            System.out.println(ex.getMessage());
+            Messages.throwExitMessage(Messages.ERROR_HELP, colour.red);
         }
     }
 }

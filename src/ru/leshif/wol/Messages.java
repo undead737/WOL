@@ -16,13 +16,24 @@ class Messages {
     static final String ERROR_SEND_WOL = "Error sending wol-packet to ";
     static final String INFO_NET = "Use option -na to display all available network interfaces";
     static final String INFO_SEND = "Sending to ";
+    static final String ERROR_HELP = "Error trying to read HELP file. You may use git documentation";
 
     static void throwExitMessage(String message, colour col){
-        System.out.println((char)27 + getColour(col) + message + reset_colour);
+        if (!System.getProperty("os.name").toLowerCase().contains("windows")){
+            System.out.println((char)27 + getColour(col) + message + reset_colour);
+        }
+        else{
+            System.out.println(message);
+        }
         System.exit(0);
     }
     static void throwInfoMessage(String message, colour col){
-        System.out.println((char)27 + getColour(col) +  message + reset_colour);
+        if (!System.getProperty("os.name").toLowerCase().contains("windows")) {
+            System.out.println((char) 27 + getColour(col) + message + reset_colour);
+        }
+        else {
+            System.out.println(message);
+        }
     }
     static private String getColour(colour col){
         switch (col){

@@ -61,7 +61,7 @@ class Network {
     }
     ArrayList<String> getAllInterfaces(){
         ArrayList<String> result = new ArrayList<>();
-        _netInterfaces.forEach(x -> result.add(x._number + "   " + x._name + "   " + x._broadcast));
+        _netInterfaces.forEach(x -> result.add("ID: " + x._number + "   Name: " + x._name + "   Broadcast: " + x._broadcast));
         return result;
     }
     InetAddress getBroadcast(int number){
